@@ -294,13 +294,18 @@ extension SharedContainer.Scope {
 #if swift(>=5.1)
 /// Convenience property wrapper takes a factory and creates an instance of the desired type.
 @propertyWrapper public struct Injected<T> {
-    private var dependency: T
+    private var factory: Factory<T>
+    private var dependency: T?
     public init(_ factory: Factory<T>) {
-        self.dependency = factory()
+        self.factory = factory
     }
-    public var wrappedValue: T {
-        get { return dependency }
-        mutating set { dependency = newValue }
+    public var wrappedValuecall : T {
+        get {
+            return dependency ?? factory()
+        }
+        set {
+            dependency = newValue
+        }
     }
 }
 
